@@ -1,0 +1,13 @@
+apiVersion: networking.k8s.io/v1
+kind: IngressRoute
+metadata:
+  name: weather-app
+spec:
+  entryPoints:
+    - web
+  routes:
+  - match: Host(`weather.dev.dev-denny.cloudns.be`)
+    kind: Rule
+    services:
+    - name: weather-app
+      port: 80
