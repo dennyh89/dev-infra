@@ -13,6 +13,18 @@ spec:
     spec:
       containers:
       - name: weather-app-container
-        image: dennyherbrich/weather-app:v1
+        image: dennyherbrich/weather-app:v2
         ports:
         - containerPort: 8000
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 8080
+          initialDelaySeconds: 5
+          periodSeconds: 10
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 8080
+          initialDelaySeconds: 10
+          periodSeconds: 15
