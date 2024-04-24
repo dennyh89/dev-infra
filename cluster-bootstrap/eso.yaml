@@ -12,7 +12,7 @@ spec:
   source:
     repoURL: https://github.com/external-secrets/external-secrets
     path: deploy/charts/external-secrets
-    targetRevision: master
+    targetRevision: main
 
   # Destination cluster and namespace to deploy the application
   destination:
