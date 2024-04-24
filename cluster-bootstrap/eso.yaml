@@ -10,9 +10,9 @@ spec:
 
   # Source of the application manifests
   source:
-    repoURL: https://github.com/external-secrets/external-secrets
-    path: deploy/charts/external-secrets
-    targetRevision: main
+    repoURL: https://charts.external-secrets.io
+    targetRevision: 0.9.16
+    chart: external-secrets
 
   # Destination cluster and namespace to deploy the application
   destination:
