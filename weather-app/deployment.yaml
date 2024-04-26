@@ -14,6 +14,12 @@ spec:
       containers:
       - name: weather-app-container
         image: dennyherbrich/weather-app:v3
+        env:
+        - name: API_KEY
+          valueFrom:
+            secretKeyRef:
+              name: weather-secret
+              key: weather-api-key
         ports:
         - containerPort: 8000
         readinessProbe:
@@ -28,3 +34,10 @@ spec:
             port: 8000
           initialDelaySeconds: 10
           periodSeconds: 15
+        resources:
+          limits:
+            cpu: "1" # 1 CPU core
+            memory: "512Mi" # 512 megabytes of memory
+          requests:
+            cpu: "0.5" # 0.5 CPU core
+            memory: "256Mi" # 256 megabytes of memory
