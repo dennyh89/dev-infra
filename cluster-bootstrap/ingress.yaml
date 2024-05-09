@@ -5,12 +5,12 @@ metadata:
   namespace: argocd
 spec:
   entryPoints:
-    - websecure
+    - web
   routes:
   - match: Host(`argocd.dev.dev-denny.cloudns.be`)
     kind: Rule
     services:
     - name: argocd-server
-      port: 443
+      port: 80
       namespace: argocd
       
