@@ -2,7 +2,6 @@ apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
   name: eso
-  namespace: argocd
   labels:
     name: eso
 spec:
