@@ -11,5 +11,5 @@ spec:
     kind: Rule
     services:
     - name: argocd-server
-      port: 443
+      port: 80
       
