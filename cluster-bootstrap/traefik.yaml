@@ -13,10 +13,6 @@ spec:
     repoURL: https://github.com/traefik/traefik-helm-chart
     path: traefik
     targetRevision: master
-    helm:
-      valuesObject:
-        additionalArguments:
-        - "--insecure=true"
 
     
   # Destination cluster and namespace to deploy the application
