@@ -32,6 +32,7 @@ argocd admin initial-password -n argocd
 
 # create vault secret
 ```
+kubectl create namespace cluster-bootstrap
 kubectl apply -f vault-secret.yaml -n cluster-bootstrap
 ```
 , deploy argo, and create initial applications, than only commit to git
