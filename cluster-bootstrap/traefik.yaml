@@ -16,7 +16,7 @@ spec:
     helm:
       valuesObject:
         additionalArguments:
-        - "--insecure"
+        - "--insecure=true"
 
     
   # Destination cluster and namespace to deploy the application
