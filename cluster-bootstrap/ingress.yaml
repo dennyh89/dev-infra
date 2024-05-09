@@ -12,4 +12,5 @@ spec:
     services:
     - name: argocd-server
       port: 443
+      namespace: argocd
       
