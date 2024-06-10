@@ -6,7 +6,7 @@ metadata:
   labels:
     name: traefik-ingress
 spec:
-  project: infra
+  project: default
 
   # Source of the application manifests
   source:
