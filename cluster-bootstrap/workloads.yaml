@@ -5,6 +5,8 @@ metadata:
   namespace: argocd
   labels:
     name: workloads
+  annotations:
+    argocd.argoproj.io/sync-wave: "10"
 spec:
   project: default
 
