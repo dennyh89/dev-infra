@@ -6,7 +6,7 @@ spec:
   entryPoints:
     - web
   routes:
-  - match: PathPrefix(`/weather/**`)
+  - match: PathPrefix(`/weather`)
     kind: Rule
     services:
     - name: weather-app
