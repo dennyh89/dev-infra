@@ -15,6 +15,11 @@ spec:
     repoURL: https://github.com/traefik/traefik-helm-chart
     path: traefik
     targetRevision: master
+    helm:
+      valuesObject:
+        service:
+          annotations:
+            service.beta.kubernetes.io/azure-pip-name: static-ip
 
     
   # Destination cluster and namespace to deploy the application
