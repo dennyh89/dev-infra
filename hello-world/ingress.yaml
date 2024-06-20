@@ -6,7 +6,7 @@ spec:
   entryPoints:
     - web
   routes:
-  - match: Host(`*`) && PathPrefix(`/hello`)
+  - match: PathPrefix(`/hello`)
     kind: Rule
     services:
     - name: hello
