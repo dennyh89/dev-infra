@@ -6,7 +6,7 @@ spec:
   entryPoints:
     - web
   routes:
-  - match: Host(`weather.dev.dev-denny.cloudns.be`)
+  - match: Host(`*`) && PathPrefix(`/weather/**`)
     kind: Rule
     services:
     - name: weather-app
