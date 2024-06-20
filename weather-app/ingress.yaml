@@ -7,7 +7,7 @@ metadata:
 spec:
   stripPrefix:
     prefixes:
-      - /weather
+      - /weather-app
 
 
 ---
@@ -19,7 +19,7 @@ spec:
   entryPoints:
     - web
   routes:
-  - match: PathPrefix(`/weather`)
+  - match: PathPrefix(`/weather-app`)
     kind: Rule
     services:
     - name: weather-app
