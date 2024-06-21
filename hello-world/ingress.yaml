@@ -13,4 +13,4 @@ spec:
     - name: hello
       port: 80
   tls:
-    certResolver: acme
+    certResolver: myresolver
