@@ -24,11 +24,11 @@ spec:
             service.beta.kubernetes.io/azure-pip-name: "static-ip"
         certResolvers:
           myresolver:
-            acme:
-              httpChallenge:
-                entryPoint: web
-              email: denny.herbrich@gmail.com
-              storage: /data/acme.json
+            httpChallenge:
+              entryPoint: web
+            email: denny.herbrich@gmail.com
+            storage: /data/acme.json
+            caServer: https://acme-staging-v02.api.letsencrypt.org/directory
 
     
   # Destination cluster and namespace to deploy the application
