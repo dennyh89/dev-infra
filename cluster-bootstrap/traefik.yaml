@@ -5,6 +5,8 @@ metadata:
   namespace: argocd
   labels:
     name: traefik-ingress
+  finalizers:
+  - resources-finalizer.argocd.argoproj.io
   annotations:
     argocd.argoproj.io/sync-wave: "-1"
 spec:
@@ -16,10 +18,9 @@ spec:
     path: traefik
     targetRevision: master
     helm:
-      valuesObject:
-        service:
-          annotations:
-            service.beta.kubernetes.io/azure-pip-name: static-ip
+      parameters:
+      - name: "service.annotations"
+        value: "service.beta.kubernetes.io/azure-pip-name: static-ip"
 
     
   # Destination cluster and namespace to deploy the application
