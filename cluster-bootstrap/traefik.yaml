@@ -25,9 +25,10 @@ spec:
         certResolvers:
           myresolver:
             acme:
-            httpChallenge:
-              entryPoint: web
-            email: denny.herbrich@gmail.com
+              httpChallenge:
+                entryPoint: web
+              email: denny.herbrich@gmail.com
+              storage: /data/acme.json
 
     
   # Destination cluster and namespace to deploy the application
