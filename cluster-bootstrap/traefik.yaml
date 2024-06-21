@@ -18,9 +18,10 @@ spec:
     path: traefik
     targetRevision: master
     helm:
-      parameters:
-      - name: "service.annotations"
-        value: "service.beta.kubernetes.io/azure-pip-name: static-ip"
+      valuesObject:
+        service:
+          annotations: 
+            service.beta.kubernetes.io/azure-pip-name: "static-ip"
 
     
   # Destination cluster and namespace to deploy the application
