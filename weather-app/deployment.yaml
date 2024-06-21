@@ -13,7 +13,7 @@ spec:
     spec:
       containers:
       - name: weather-app-container
-        image: dennyherbrich/weather-app:v1.0.1
+        image: dennyherbrich/weather-app:v1.0.2
         env:
         - name: API_KEY
           valueFrom:
