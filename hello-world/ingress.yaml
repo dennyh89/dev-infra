@@ -7,9 +7,10 @@ spec:
     - web
     - websecure
   routes:
-  - match: PathPrefix(`/hello`)
+  - match: Host(`clusters.dev-denny.cloudns.be`) && PathPrefix(`/hello`)
     kind: Rule
     services:
     - name: hello
       port: 80
-      
+  tls:
+    certResolver: letsencrypt

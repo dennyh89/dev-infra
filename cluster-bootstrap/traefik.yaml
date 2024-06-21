@@ -22,6 +22,9 @@ spec:
         service:
           annotations: 
             service.beta.kubernetes.io/azure-pip-name: "static-ip"
+        acme:
+          enabled: true
+          email: denny.herbrich@gmail.com
 
     
   # Destination cluster and namespace to deploy the application
