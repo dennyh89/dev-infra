@@ -7,7 +7,6 @@ locals {
     "author" =local.prefix_name
     "purpose" = "devopschallenge"
   }
-  
 }
 
 resource "azurerm_resource_group" "one" {
@@ -21,30 +20,26 @@ resource "azurerm_kubernetes_cluster" "one" {
   name                = "${local.prefix_name}-cluster-1"
   resource_group_name = azurerm_resource_group.one.name
   dns_prefix          = "${local.prefix_name}-cluster-1"
-
   identity {
     type = "SystemAssigned"
   }
-
   default_node_pool {
     name       = "agentpool"
     vm_size    = "Standard_D2_v2"
     node_count = local.nodecount
+    upgrade_settings {
+      drain_timeout_in_minutes      = 0 
+      max_surge                     = "50%" 
+      node_soak_duration_in_minutes = 0 
+    }
   }
-  # linux_profile {
-  #   admin_username = var.username
-
-  #   ssh_key {
-  #     key_data = jsondecode(azapi_resource_action.ssh_public_key_gen.output).publicKey
-  #   }
-  # }
-
-  # TODO: rethink if switch to azure cni
   network_profile {
     network_plugin    = "kubenet"
     load_balancer_sku = "standard"
+    # load_balancer_profile {
+    #   outbound_ip_address_ids = [azurerm_public_ip.static_ip_1.id]
+    # }
   }
-
   tags = local.min_tags
 }
 
@@ -61,30 +56,26 @@ resource "azurerm_kubernetes_cluster" "two" {
   name                = "${local.prefix_name}-cluster-2"
   resource_group_name = azurerm_resource_group.two.name
   dns_prefix          = "${local.prefix_name}-cluster-2"
-
   identity {
     type = "SystemAssigned"
   }
-
   default_node_pool {
     name       = "agentpool"
     vm_size    = "Standard_D2_v2"
     node_count = local.nodecount
+    upgrade_settings {
+      drain_timeout_in_minutes      = 0 
+      max_surge                     = "50%" 
+      node_soak_duration_in_minutes = 0 
+    }
   }
-  # linux_profile {
-  #   admin_username = var.username
-
-  #   ssh_key {
-  #     key_data = jsondecode(azapi_resource_action.ssh_public_key_gen.output).publicKey
-  #   }
-  # }
-
-  # TODO: rethink if switch to azure cni
   network_profile {
     network_plugin    = "kubenet"
     load_balancer_sku = "standard"
+    # load_balancer_profile {
+    #   outbound_ip_address_ids = [azurerm_public_ip.static_ip_2.id]
+    # }
   }
-
   tags = local.min_tags
 }
 
@@ -102,8 +93,8 @@ data "azurerm_kubernetes_cluster" "two" {
 
 resource "azurerm_public_ip" "static_ip_1" {
   name                = "static-ip"
-  location            = data.azurerm_kubernetes_cluster.one.location
-  resource_group_name = data.azurerm_kubernetes_cluster.one.node_resource_group
+  location            = local.location
+  resource_group_name = data.azurerm_kubernetes_cluster.one.resource_group_name
   allocation_method   = "Static"
   sku                 = "Standard"
   domain_name_label = "cluster-1-randomdomain"
@@ -112,8 +103,8 @@ resource "azurerm_public_ip" "static_ip_1" {
 
 resource "azurerm_public_ip" "static_ip_2" {
   name                = "static-ip"
-  location            = data.azurerm_kubernetes_cluster.two.location
-  resource_group_name = data.azurerm_kubernetes_cluster.two.node_resource_group
+  location            = local.location2
+  resource_group_name = data.azurerm_kubernetes_cluster.two.resource_group_name
   allocation_method   = "Static"
   sku                 = "Standard"
   domain_name_label = "cluster-2-randomdomain"
@@ -131,21 +122,16 @@ resource "azurerm_resource_group" "router" {
 resource "azurerm_traffic_manager_profile" "clusters" {
   name                = "clusters-tm-profile"
   resource_group_name = azurerm_resource_group.router.name
-
-
   traffic_routing_method = "Weighted"
-
   dns_config {
     relative_name = "clusters-tm-profile"
     ttl           = 30
   }
-  
   monitor_config {
     port = 80
     protocol = "HTTP"
     path = "/hello"
   }
-
    tags = local.min_tags
 }
 
@@ -153,18 +139,14 @@ resource "azurerm_traffic_manager_azure_endpoint" "one" {
   name                = "one"
   profile_id =          azurerm_traffic_manager_profile.clusters.id
   always_serve_enabled = true
-
   target_resource_id  = azurerm_public_ip.static_ip_1.id
-
   weight = 50
-
 }
 
 resource "azurerm_traffic_manager_azure_endpoint" "two" {
   name                = "two"
   profile_id =          azurerm_traffic_manager_profile.clusters.id
   always_serve_enabled = true
-
   target_resource_id  = azurerm_public_ip.static_ip_2.id
   weight = 50
 }
