@@ -1,38 +1,64 @@
-# Connect to Cluster
+# Install on Azure
+
+## Login to azure with CLI
 
 ```
 az login
-az account set --subscription 89535820-f404-4ac0-af08-8646327bc3f7
-az aks get-credentials --resource-group dev --name dev --overwrite-existing
-
-kubectl get pods -A
+az account list --output table
+az account set --subscription 2fc0173e-cada-4000-82db-566c79d396db
 ```
 
-# Install ArgoCD
+## Create TFstate backend storage
 
 ```
-kubectl create namespace argocd
-kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
+LOCATION="germanywestcentral"
+RESOURCE_GROUP_NAME=tfstate
+STORAGE_ACCOUNT_NAME=tfstate$RANDOM
+CONTAINER_NAME=tfstate
 
+az group create --name $RESOURCE_GROUP_NAME --location $LOCATION --tags author=dennyh purpose=devopschallenge
 
-brew install argocd
+az storage account create --resource-group $RESOURCE_GROUP_NAME --name $STORAGE_ACCOUNT_NAME --sku Standard_LRS --encryption-services blob --tags author=dennyh purpose=devopschallenge
 
-# publish UI
-kubectl port-forward svc/argocd-server -n argocd 8080:443
+az storage container create --name $CONTAINER_NAME --account-name $STORAGE_ACCOUNT_NAME 
+
+ACCOUNT_KEY=$(az storage account keys list --resource-group $RESOURCE_GROUP_NAME --account-name $STORAGE_ACCOUNT_NAME --query '[0].value' -o tsv)
 ```
 
-# Connect to Argo UI
-```
-kubectl get secret -n argocd argocd-initial-admin-secret -o yaml | yq .data.password | base64 -d
+## Set environment variables
 
-# OR
+Create .envrc file for direnv or manually export these variables.
+clientId/Secret for a azure keyvault for external secrets operator.
 
-argocd admin initial-password -n argocd
+TF_VAR_arm_access_key with the ACCOUNT_KEY from above for the tfstate backend.
+
 ```
 
-# create vault secret
+# for vault access
+export TF_VAR_client_id="afayxxxxx23b69"
+export TF_VAR_client_secret="ZQCxxxxxxxZJb3h"
+
+# for tfstate backend
+export TF_VAR_arm_access_key="GpfWSb1JtxxxxxxSthToWvg=="
+
 ```
-kubectl create namespace cluster-bootstrap
-kubectl apply -f vault-secret.yaml -n cluster-bootstrap
+
+## Create Infrastructure
+
 ```
-, deploy argo, and create initial applications, than only commit to git
+cd terraform/infra
+terraform apply
+```
+
+## setup gitops on clusters
+
+```
+cd terraform/gitops-bootstrap
+terraform apply
+```
+
+
+## Current problems
+* path based routing: need to make weather-app proxy aware because of not creating wildcard certs and trafficmanager restrictions
+* terraform destroy on gitops-bootstrap module deletes argocd before destroying and finalizing the bootstrap application that also creates a loadbalancer service, which leads the infrastructure destroy later to fail because of the loadbalancer still being used 
+* certificate creation with letsencrypt and acme works in single cluster mode, but not in loadbalanced active-active because of the http challenge possibly not working, might need to switch to DNS challenge, but its only in paid plans
