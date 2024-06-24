@@ -78,3 +78,10 @@ hey -c 750 -z 3m https://clusters.dev-denny.cloudns.be/hello
 ```
 
 access https://clusters.dev-denny.cloudns.be/hello
+
+
+Weather app using Azure Keyvault with external secrets operator
+
+```
+http://clusters.dev-denny.cloudns.be/weather-app/
+```
