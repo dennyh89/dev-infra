@@ -62,3 +62,19 @@ terraform apply
 * path based routing: need to make weather-app proxy aware because of not creating wildcard certs and trafficmanager restrictions
 * terraform destroy on gitops-bootstrap module deletes argocd before destroying and finalizing the bootstrap application that also creates a loadbalancer service, which leads the infrastructure destroy later to fail because of the loadbalancer still being used 
 * certificate creation with letsencrypt and acme works in single cluster mode, but not in loadbalanced active-active because of the http challenge possibly not working, might need to switch to DNS challenge, but its only in paid plans
+
+## Demo
+```
+az aks get-credentials --resource-group dehe --name dehe-cluster-1 --overwrite-existing 
+kubectl get nodes
+az aks get-credentials --resource-group dehe-2 --name dehe-cluster-2 --overwrite-existing 
+kubectl get nodes
+kubectl get hpa -A -w
+```
+
+run load against hello container
+```
+hey -c 750 -z 3m https://clusters.dev-denny.cloudns.be/hello  
+```
+
+access https://clusters.dev-denny.cloudns.be/hello

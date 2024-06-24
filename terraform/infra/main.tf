@@ -94,7 +94,7 @@ data "azurerm_kubernetes_cluster" "two" {
 resource "azurerm_public_ip" "static_ip_1" {
   name                = "static-ip"
   location            = local.location
-  resource_group_name = data.azurerm_kubernetes_cluster.one.resource_group_name
+  resource_group_name = data.azurerm_kubernetes_cluster.one.node_resource_group
   allocation_method   = "Static"
   sku                 = "Standard"
   domain_name_label = "cluster-1-randomdomain"
@@ -104,7 +104,7 @@ resource "azurerm_public_ip" "static_ip_1" {
 resource "azurerm_public_ip" "static_ip_2" {
   name                = "static-ip"
   location            = local.location2
-  resource_group_name = data.azurerm_kubernetes_cluster.two.resource_group_name
+  resource_group_name = data.azurerm_kubernetes_cluster.two.node_resource_group
   allocation_method   = "Static"
   sku                 = "Standard"
   domain_name_label = "cluster-2-randomdomain"
