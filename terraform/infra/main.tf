@@ -150,29 +150,3 @@ resource "azurerm_traffic_manager_azure_endpoint" "two" {
   target_resource_id  = azurerm_public_ip.static_ip_2.id
   weight = 50
 }
-
-#
-# GKE
-#
-
-# resource "google_container_cluster" "test-cluster-1" {
-#   name     = "test-cluster-1"
-#   location = var.region
-
-#   initial_node_count = 1
-#   node_locations = [ "${var.region}-a" ]
-#   deletion_protection = false
-#   node_config {
-#     machine_type = "n1-standard-2"
-#     oauth_scopes = [
-#       "https://www.googleapis.com/auth/cloud-platform",
-#     ]
-#   }
-# }
-
-# resource "null_resource" "kubeconfig" {
-#   depends_on = [google_container_cluster.test-cluster-1]
-#   provisioner "local-exec" {
-#     command     = "gcloud container clusters get-credentials ${google_container_cluster.test-cluster-1.name} --region ${var.region} --project ${var.project_id}"
-#   }
-# }

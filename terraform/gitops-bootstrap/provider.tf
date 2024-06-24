@@ -1,8 +1,8 @@
 terraform {
   required_providers {
-    google = {
-      source  = "hashicorp/google"
-      version = "~> 5.32.0"
+    azurerm = {
+      source  = "hashicorp/azurerm"
+      version = ">=3.0.0"
     }
     kubernetes = {
       source = "hashicorp/kubernetes"
@@ -38,13 +38,6 @@ locals {
   kube_config_two = yamldecode(data.terraform_remote_state.clusters.outputs.cluster_two)
 }
 
-# provider "kubernetes" {
-#   host                   = data.azurerm_kubernetes_cluster.default.kube_config.0.host
-#   client_certificate     = base64decode(data.azurerm_kubernetes_cluster.default.kube_config.0.client_certificate)
-#   client_key             = base64decode(data.azurerm_kubernetes_cluster.default.kube_config.0.client_key)
-#   cluster_ca_certificate = base64decode(data.azurerm_kubernetes_cluster.default.kube_config.0.cluster_ca_certificate)
-# }
-
 provider "kubectl" {
   host                   = local.kube_config_one.clusters.0.cluster.server
   client_certificate     = base64decode(local.kube_config_one.users.0.user.client-certificate-data)
@@ -63,14 +56,6 @@ provider "kustomization" {
 #
 # Cluster two
 #
-
-
-# provider "kubernetes" {
-#   host                   = data.azurerm_kubernetes_cluster.default.kube_config.0.host
-#   client_certificate     = base64decode(data.azurerm_kubernetes_cluster.default.kube_config.0.client_certificate)
-#   client_key             = base64decode(data.azurerm_kubernetes_cluster.default.kube_config.0.client_key)
-#   cluster_ca_certificate = base64decode(data.azurerm_kubernetes_cluster.default.kube_config.0.cluster_ca_certificate)
-# }
 
 provider "kubectl" {
   host                   = local.kube_config_two.clusters.0.cluster.server

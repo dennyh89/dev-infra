@@ -1,13 +1,4 @@
 locals {
-  # location = "northeurope"
-  # location2 = "germanywestcentral"
-  # prefix_name= "dennyh"
-  # nodecount = 2
-  # min_tags= {
-  #   "author" =local.prefix_name
-  #   "purpose" = "devopschallenge"
-  # }
-  
 }
 
 
@@ -15,20 +6,6 @@ locals {
 # Create argocd namespace
 # and resources
 # and cluster-bootstrap namespace
-
-# data "kustomization" "argocd_install" {
-  
-#   # path to kustomization directory
-#   path = "../../gitops-bootstrap/"
-# }
-
-# resource "kustomization_resource" "argocd_install" {
-
-#   for_each = data.kustomization.argocd_install.ids
-
-#   manifest = data.kustomization.argocd_install.manifests[each.value]
-
-# }
 
 module "kustomization_cluster_one" {
   source = "kbst.xyz/catalog/custom-manifests/kustomization"
